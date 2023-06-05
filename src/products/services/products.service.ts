@@ -23,28 +23,17 @@ export class ProductsService {
     return product;
   }
 
-  // Crear producto
   create(data: CreateProductDto) {
-    // Creamos una nueva instancia del producto desde la clase
     const newProduct = this.productRepo.create(data);
-
-    // Guardamos el nuevo producto en la db
     return this.productRepo.save(newProduct);
   }
 
-  // Actualizar producto
   async update(id: number, changes: UpdateProductDto) {
-    // buscamos el producto
     const product = await this.productRepo.findOneBy({ id });
-
-    // actualizamos el producto
     this.productRepo.merge(product, changes);
-
-    // guardamos los datos
     return this.productRepo.save(product);
   }
 
-  // Borrar producto
   remove(id: number) {
     return this.productRepo.delete(id);
   }
