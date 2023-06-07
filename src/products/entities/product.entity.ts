@@ -3,12 +3,16 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  PrimaryColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+
+// importamos la entidad que vamos a referenciar
+import { Brand } from './brand.entity';
 
 @Entity()
 export class Product {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar', length: 255, unique: true })
@@ -25,6 +29,9 @@ export class Product {
 
   @Column({ type: 'varchar' })
   image: string;
+
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand: Brand;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

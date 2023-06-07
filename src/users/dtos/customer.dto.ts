@@ -10,7 +10,7 @@ export class CreateCustomerDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  readonly lastName: string;
+  readonly lastname: string;
 
   @IsPhoneNumber()
   @IsNotEmpty()

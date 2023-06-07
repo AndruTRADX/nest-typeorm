@@ -3,13 +3,16 @@ import {
   Entity,
   UpdateDateColumn,
   CreateDateColumn,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+
+import { Customer } from './customer.entity';
 
 @Entity()
 export class User {
-  // llave primaria
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar', length: 255, unique: true })
@@ -26,4 +29,8 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToOne(() => Customer, (customer) => customer.user, { nullable: true })
+  @JoinColumn()
+  customer: Customer;
 }
