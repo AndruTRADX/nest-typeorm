@@ -2,18 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { User } from '../entities/user.entity';
-// import { Order } from '../entities/order.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 
-import { ProductsService } from './../../products/services/products.service';
-import { CustomersService } from './customers.service';
+// import { Order } from '../entities/order.entity';
+import { User } from '../entities/user.entity';
+import { Product } from 'src/products/entities/product.entity';
+import { Customer } from '../entities/customer.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private productsService: ProductsService,
-    private customersService: CustomersService,
+    @InjectRepository(Product) private productRepo: Repository<Product>,
+    @InjectRepository(Customer) private customerRepo: Repository<Customer>,
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
@@ -35,7 +35,9 @@ export class UsersService {
   async create(data: CreateUserDto) {
     const newUser = this.userRepo.create(data);
     if (data.customerId) {
-      const customer = await this.customersService.findOne(data.customerId);
+      const customer = await this.customerRepo.findOneBy({
+        id: data.customerId,
+      });
       newUser.customer = customer;
     }
     return this.userRepo.save(newUser);
@@ -56,7 +58,7 @@ export class UsersService {
     return {
       date: new Date(),
       user,
-      products: await this.productsService.findAll(),
+      products: await this.productRepo.find(),
     };
   }
 }

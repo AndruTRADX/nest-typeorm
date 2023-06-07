@@ -5,17 +5,21 @@ import {
   UpdateDateColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
-// importamos la entidad que vamos a referenciar
 import { Brand } from './brand.entity';
+
+// importamos la entidad a la cual queremos hacer la relación
+import { Category } from './category.entity';
 
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
   @Column({ type: 'text' })
@@ -38,4 +42,8 @@ export class Product {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @ManyToMany(() => Category, (categories) => categories.products)
+  @JoinTable()
+  categories: Category[];
 }
