@@ -24,4 +24,8 @@ export class OrderItemService {
     item.quantity = data.quantity;
     return this.itemRepo.save(item);
   }
+
+  async remove(id: number) {
+    return await this.itemRepo.delete(id);
+  }
 }
